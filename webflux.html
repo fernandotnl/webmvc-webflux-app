@@ -1,0 +1,197 @@
+<html>
+ 	<head>
+        <meta charset="utf-8">
+        <title>
+        	Spring MVC vs Spring WebFlux
+        </title>
+    </head>
+	<body>
+        <section>
+            <h2>Introduction</h2>
+            <p>
+                In this post we will show how to write a REST microservice using reactive programming with Sprint Web Flux as an alternative to Spring Web MVC.
+            </p>
+        </section>
+        <section>
+            <h2>Reactive Programming</h2>
+            <p>
+                Before start, it's important to explain what reactive programming means.
+                Succinctly: reactive programming is programming paradigm oriented to data stream and propagation of changes (asynchronous).
+            </p>
+            <p>
+                An easy way to understand propagation of changes is to remember who a excel formula works: everytime one of its reffered cells are
+                changed, the value is updated. That behaviour resembles to the design pattern Observer introduced by the famous Gang of Four book called 
+                <i>Design Patterns: Elements of Reusable Object-Oriented Software</i>.
+            </p>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Observer_w_update.svg/854px-Observer_w_update.svg.png"/>
+            <p>
+                In the picture above we can see that the Subject possess information being watched by the Observers.
+                These observers register themselves to receive notifications of changes in the Subject when it suffers a change of state.
+                Upon being notified, the Observers will perform some operation for which they have been programmed. That's where the propagation of changes happen.
+            </p>
+            <h3>Main features</h3>
+            <p>
+                When talking about reactive programming there are some essentials features worth mentioning such as:
+            </p>
+            <ul>
+                <li>
+                    <strong>Data Streams:</strong> sequences of events ordered in a temporal way and can be manifested in several ways, for example: parts of a
+                     file being downloaded, mouse cursor positions, twitter feed, RESTful service calls, etc.
+                </li>
+                <li>
+                    <strong>Asyncronous:</strong> 
+                    events are captured asynchronously, a function is defined to be performed when one event is issued, another is set to when an error is issued 
+                    and another to when a completion event is issued.
+                </li>
+                <li>
+                    <strong>Non-blocking:</strong> a blocking code will stop and wait for more data (disk read, network, etc), however the non-blocking 
+                    code will process the available data, request to be notified when more data is available and then continue.
+                </li>
+                <li>
+                    <strong>Backpressure:</strong> the subscriber's ability to limit data
+                </li>
+                <li>
+                    <strong>Failures as Messages:</strong> exceptions should not be thrown in the traditional way. In fact, they must be processed by a 
+                    handler function.
+                </li>
+            </ul>
+            <h3>Four pillars</h3>
+            <p>
+                Reactive programming is build upon four pillars: 
+                <ul>
+                    <li>
+                        Responsive: A responsive system is quick to react to all users — under blue skies and grey skies — 
+                        in order to ensure a consistently positive user experience.
+                    </li>
+                    <li>
+                        Resilient: A scalable system is easily upgraded on demand in order to ensure responsiveness under various load conditions.
+                    </li>
+                    <li>
+                        Scalable: A resilient system applies proper design and architecture principles in order to ensure responsiveness under grey 
+                        skies as well as blue.
+                    </li>
+                    <li>
+                        Message-driven: A message-driven application may be event-driven, actor-based (directed messages), or a combination of the 
+                        two. The main difference between messages and events is that messages are directed while events happen.
+                        Messages have a clear destination while events may be observed by zero or more (0-N) observers.
+                    </li>
+                </ul>
+            </p>
+        </section>
+        <section>
+            <h2>Reactive Streams API</h2>
+            <p>
+                Spring Framework 5 introduces the React Streams API to create a pattern for processing streams asynchronously with non-blocking return pressure.
+                Reactive Streams started in 2013 by engineers from Netflix, Pivotal, Lightbend (formerly Typesafe), Red Hat, Twitter and Oracle.
+                The Reactive Streams API defines 4 interfaces: Publisher, Subscriber, Subscription and Processor.
+            </p>
+            <ul>
+                <li>
+                    <strong>Publisher:</strong><br/>
+                    <script src="https://gist.github.com/fernandotnl/a399fae1030f9f296f324fffcab40009.js"></script>
+                </li>
+                <li>
+                    <strong>Subscriber:</strong><br/>
+                    <script src="https://gist.github.com/fernandotnl/14c1fc8c5c852357edb3fcf19952c4c4.js"></script>
+                </li>
+                <li>
+                    <strong>Subscription:</strong><br/>
+                    <script src="https://gist.github.com/fernandotnl/68f5e53609a95674f237517c36b16b6d.js"></script>
+                </li>
+                <li>
+                    <strong>Processor:</strong><br/>
+                    <script src="https://gist.github.com/fernandotnl/729d8c02783a062167eb5ac3bac185c5.js"></script>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Spring WebFlux</h2>
+            <p>
+                
+                It is the support module for reactive programming in the Spring Framework's web layer. One of the most interesting things about this module is 
+                that even though the architecture behind it is quite different from the conventional Spring MVC, it offers an alternative to use it taking 
+                advantage of some of the most relevant Spring MVC features: the annotations @Controller and @RequestMapping. We can see this in the following image:
+            </p>
+            <img src="https://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/images/webflux-overview.png"/>
+            <p>
+                In addition to the alternative mentioned above, Spring WebFlux also offers Router Functions to map controllers and endpoints. However, this alternative will not be presented in this post.
+            </p>
+            <h3> Spring Reactive Types</h3>
+            <p>
+                Spring Framework 5 introduces two new publisher reactive types: Mono and Flux. 
+                While Mono is a publisher with zero or one element in the data stream, Flux is a publisher with zero or many elements in the data stream.
+            </p>
+        <section>
+            <h2>Spring MVC vs Spring WebFlux</h2>
+            <p>
+                Now let's see the difference between a REST CRUD service implemented with Spring MVC and Spring WebFlux.
+                In order to show this difference, we are going to show how to implement three layers in both modules: Repository, Service and Controller.
+            </p>
+            <h3>Repository</h3>
+            <ul>
+                <li>
+                    Spring MVC:<br/>
+                    <script src="https://gist.github.com/fernandotnl/ca6e61f28c5f10764f7db8798c1dbb85.js"> </script>
+                </li>
+                <li>
+                    Spring WebFlux:<br/>
+                    <script src="https://gist.github.com/fernandotnl/fcd75c1fa73923c64c3295277861049b.js"> </script>
+                </li>
+            </ul>
+            <p> 
+                The difference here is merely extends from ReactiveMongoRepository instead of MongoRepository.
+            </p>
+            <h3>Service</h3>
+            <ul>
+                <li> 
+                    Spring MVC:<br/>
+                    <script src="https://gist.github.com/fernandotnl/02bdc5cb4e4675f3890dfff4a25644b3.js"> </script>
+                </li>
+                <li>
+                    Spring WebFlux:<br/>
+                    <script src="https://gist.github.com/fernandotnl/8e2738f4b711a5c0d2c721a3e769c3c4.js"> </script>
+                </li>
+            </ul>
+            <p>
+                Here we can see some small differences such as instead of using <i>Person</i> object, we change it to <i>Mono&lt;Person&gt;</i> and for 
+                <i>List&lt;Person&gt;</i>, we change it to <i>Flux&lt;Person&gt;</i>. Also, in Service <i>save</i> method we needed to call <i>block()</i> method
+                in the Mono&lt;Person&gt; parameter since ReactiveMongoRepository&lt;Person, String&gt; <i>save</i> method expects us to pass a Person object. That's
+                how we ask the data stream to perform a blocking action and give us the object to be saved.
+            </p>
+            <h3>Controller</h3>
+            <ul>
+                <li>
+                    Spring MVC:<br/>
+                    <script src="https://gist.github.com/fernandotnl/5eb773bb3270c575c93466573efa5b0f.js"> </script>
+                </li>
+                <li>
+                    Spring WebFlux:<br/>
+                    <script src="https://gist.github.com/fernandotnl/2ed3a657471ccaac3ce6f1484a17b965.js"> </script>
+                </li>
+            </ul>
+            <p>
+                Similarly to the changes on the service layer, here we need to replace <i>ResponseEntity&lt;Person&gt;</i> for <i>Mono&lt;Person&gt;</i> and 
+                <i>ResponseEntity&lt;List&lt;Person&gt;&gt;</i> for <i>Flux&lt;Person&gt;</i>. Also, to make sure that we are still returning the same HTTP status code,
+                we need to annotate the methods with @ResponseStatus.
+            </p>
+        </section>
+        <section>
+            <h2>References</h2>
+            <ul>
+                <li>
+                    <a href="https://medium.com/olxbr-tech/por-que-programação-reativa-8fba7e754a0f">https://medium.com/olxbr-tech/por-que-programação-reativa-8fba7e754a0f</a>
+                </li>
+                <li>
+                    <a href="https://dzone.com/articles/spring-webflux-first-steps">https://dzone.com/articles/spring-webflux-first-steps</a>
+                </li>
+                <li>
+                    <a href="https://www.udemy.com/spring-framework-5-beginner-to-guru/learn/v4/content">https://www.udemy.com/spring-framework-5-beginner-to-guru/learn/v4/content</a>
+                </li>
+                <li>
+                    <a href="https://blog.redelastic.com/what-is-reactive-programming-bc9fa7f4a7fc">https://blog.redelastic.com/what-is-reactive-programming-bc9fa7f4a7fc</a>
+                </li>
+                
+            </ul>
+        </section>
+	</body>
+</html>
