@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface PersonService {
 
-    Optional<Person> findById(String id);
+    Person findById(String id);
 
     List<Person> findAll();
 
