@@ -2,14 +2,16 @@
  	<head>
         <meta charset="utf-8">
         <title>
-        	Spring MVC vs Spring WebFlux
+        	An easy approach to migrating from Spring MVC to Spring WebFlux
         </title>
     </head>
 	<body>
         <section>
             <h2>Introduction</h2>
             <p>
-                In this post we will show how to write a REST microservice using reactive programming with Sprint Web Flux as an alternative to Spring Web MVC.
+                In this post we will show how to write a REST service using reactive programming with Sprint Web Flux as an alternative to Spring Web MVC. 
+                The goal here is to demonstrate to developers who got used to developing applications using Spring MVC that it is possible to migrate to a reactive 
+                application with very small changes.
             </p>
         </section>
         <section>
@@ -19,7 +21,7 @@
                 Succinctly: reactive programming is programming paradigm oriented to data stream and propagation of changes (asynchronous).
             </p>
             <p>
-                An easy way to understand propagation of changes is to remember who a excel formula works: everytime one of its reffered cells are
+                An easy way to understand propagation of changes is to remember who an excel formula works: everytime one of its reffered cells are
                 changed, the value is updated. That behaviour resembles to the design pattern Observer introduced by the famous Gang of Four book called 
                 <i>Design Patterns: Elements of Reusable Object-Oriented Software</i>.
             </p>
@@ -106,25 +108,30 @@
         </section>
         <section>
             <h2>Spring WebFlux</h2>
-            <p>
-                
+            <p> 
                 It is the support module for reactive programming in the Spring Framework's web layer. One of the most interesting things about this module is 
                 that even though the architecture behind it is quite different from the conventional Spring MVC, it offers an alternative to use it taking 
-                advantage of some of the most relevant Spring MVC features: the annotations @Controller and @RequestMapping. We can see this in the following image:
+                advantage of some of the most relevant Spring MVC features: the annotations <i>@Controller</i> and <i>@RequestMapping</i>. We can see this in the following image:
             </p>
             <img src="https://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/images/webflux-overview.png"/>
             <p>
-                In addition to the alternative mentioned above, Spring WebFlux also offers Router Functions to map controllers and endpoints. However, this alternative will not be presented in this post.
+                The main difference is that the underlying core, framework contracts — i.e. <i>HandlerMapping</i>, <i>HandlerAdapter</i>, are non-blocking and 
+                operate on the reactive <i>ServerHttpRequest</i> and <i>ServerHttpResponse</i> rather than on the <i>HttpServletRequest</i> and 
+                <i>HttpServletResponse</i>
+                In addition to the alternative mentioned above, Spring WebFlux also offers Router Functions to map controllers and endpoints. However, this 
+                alternative will not be presented in this post.
             </p>
             <h3> Spring Reactive Types</h3>
             <p>
-                Spring Framework 5 introduces two new publisher reactive types: Mono and Flux. 
-                While Mono is a publisher with zero or one element in the data stream, Flux is a publisher with zero or many elements in the data stream.
+                Spring Framework 5 uses <a href="https://projectreactor.io">Reactor</a> - a Reactive Stream implementation - to provide two Reactive Streams 
+                Publishers called Mono and Flux, the first one is responsable manage operations in data sequences of 0..1 and the second manages operations in data 
+                sequences of 0..N. These publishes are exposed in many of Spring Framework's own APIs, but it also provides with full support the use of RxJava, at 
+                the application level.
             </p>
         <section>
             <h2>Spring MVC vs Spring WebFlux</h2>
             <p>
-                Now let's see the difference between a REST CRUD service implemented with Spring MVC and Spring WebFlux.
+                Now let's see the differences between a REST CRUD service implemented with Spring MVC and Spring WebFlux.
                 In order to show this difference, we are going to show how to implement three layers in both modules: Repository, Service and Controller.
             </p>
             <h3>Repository</h3>
@@ -155,7 +162,7 @@
             <p>
                 Here we can see some small differences such as instead of using <i>Person</i> object, we change it to <i>Mono&lt;Person&gt;</i> and for 
                 <i>List&lt;Person&gt;</i>, we change it to <i>Flux&lt;Person&gt;</i>. Also, in Service <i>save</i> method we needed to call <i>block()</i> method
-                in the Mono&lt;Person&gt; parameter since ReactiveMongoRepository&lt;Person, String&gt; <i>save</i> method expects us to pass a Person object. That's
+                in the <i>Mono&lt;Person&gt;</i> parameter since <i>ReactiveMongoRepository&lt;Person, String&gt;</i> <i>save</i> method expects us to pass a <i>Person</i> object. That's
                 how we ask the data stream to perform a blocking action and give us the object to be saved.
             </p>
             <h3>Controller</h3>
@@ -172,7 +179,7 @@
             <p>
                 Similarly to the changes on the service layer, here we need to replace <i>ResponseEntity&lt;Person&gt;</i> for <i>Mono&lt;Person&gt;</i> and 
                 <i>ResponseEntity&lt;List&lt;Person&gt;&gt;</i> for <i>Flux&lt;Person&gt;</i>. Also, to make sure that we are still returning the same HTTP status code,
-                we need to annotate the methods with @ResponseStatus.
+                we need to annotate the methods with <i>@ResponseStatus</i>.
             </p>
         </section>
         <section>
@@ -188,9 +195,11 @@
                     <a href="https://www.udemy.com/spring-framework-5-beginner-to-guru/learn/v4/content">https://www.udemy.com/spring-framework-5-beginner-to-guru/learn/v4/content</a>
                 </li>
                 <li>
+                    <a href="https://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/web-reactive.html">https://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/web-reactive.html</a>
+                </li>
+                <li>
                     <a href="https://blog.redelastic.com/what-is-reactive-programming-bc9fa7f4a7fc">https://blog.redelastic.com/what-is-reactive-programming-bc9fa7f4a7fc</a>
                 </li>
-                
             </ul>
         </section>
 	</body>
